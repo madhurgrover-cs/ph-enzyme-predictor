@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pH and Enzyme Activity Predictor</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="background-animation">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-flask"></i>
+                <h1>pH Enzyme Predictor</h1>
+            </div>
+            <nav class="nav">
+                <a href="#predictor" class="nav-link active" data-section="predictor">
+                    <i class="fas fa-calculator"></i>
+                    Predictor
+                </a>
+                <a href="#education" class="nav-link" data-section="education">
+                    <i class="fas fa-graduation-cap"></i>
+                    Education
+                </a>
+                <a href="#about" class="nav-link" data-section="about">
+                    <i class="fas fa-info-circle"></i>
+                    About
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <!-- Predictor Section -->
+        <section id="predictor" class="section active">
+            <div class="container">
+                <div class="hero">
+                    <h2 class="hero-title">
+                        <i class="fas fa-microscope"></i>
+                        pH & Enzyme Activity Predictor
+                    </h2>
+                    <p class="hero-subtitle">
+                        Discover how pH levels affect enzyme activity and learn about enzyme denaturation
+                    </p>
+                </div>
+
+                <div class="predictor-grid">
+                    <div class="input-panel">
+                        <div class="card">
+                            <h3 class="card-title">
+                                <i class="fas fa-sliders-h"></i>
+                                Controls
+                            </h3>
+                            
+                            <div class="input-group">
+                                <label for="enzyme-select" class="label">Select Enzyme</label>
+                                <select id="enzyme-select" class="select">
+                                    <option value="">Choose an enzyme...</option>
+                                    <option value="Pepsin">Pepsin</option>
+                                    <option value="Amylase">Amylase</option>
+                                    <option value="Trypsin">Trypsin</option>
+                                </select>
+                            </div>
+
+                            <div class="input-group">
+                                <label for="ph-input" class="label">
+                                    pH Value: <span id="ph-display">7.0</span>
+                                </label>
+                                <input type="range" id="ph-slider" class="slider" min="0" max="14" step="0.1" value="7">
+                                <input type="number" id="ph-input" class="number-input" min="0" max="14" step="0.1" value="7" placeholder="Enter pH">
+                            </div>
+
+                            <button id="calculate-btn" class="btn btn-primary" disabled>
+                                <i class="fas fa-play"></i>
+                                Calculate Activity
+                            </button>
+
+                            <div id="quick-tests" class="quick-tests">
+                                <h4>Quick Tests:</h4>
+                                <div class="quick-test-buttons">
+                                    <button class="btn btn-small" data-enzyme="Pepsin" data-ph="2.0">Pepsin pH 2.0</button>
+                                    <button class="btn btn-small" data-enzyme="Amylase" data-ph="7.0">Amylase pH 7.0</button>
+                                    <button class="btn btn-small" data-enzyme="Trypsin" data-ph="8.0">Trypsin pH 8.0</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="enzyme-info-card" id="enzyme-info">
+                            <h3 class="card-title">
+                                <i class="fas fa-dna"></i>
+                                Enzyme Information
+                            </h3>
+                            <div class="enzyme-details">
+                                <p class="select-message">Select an enzyme to see detailed information</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="results-panel">
+                        <div class="card">
+                            <h3 class="card-title">
+                                <i class="fas fa-chart-line"></i>
+                                Activity Results
+                            </h3>
+                            
+                            <div id="results-container" class="results-container">
+                                <div class="no-results">
+                                    <i class="fas fa-flask"></i>
+                                    <p>Select an enzyme and pH value to see activity prediction</p>
+                                </div>
+                            </div>
+
+                            <div id="activity-meter" class="activity-meter hidden">
+                                <h4>Activity Level</h4>
+                                <div class="meter">
+                                    <div class="meter-fill" id="meter-fill"></div>
+                                    <div class="meter-text" id="meter-text">0%</div>
+                                </div>
+                                <div class="activity-status" id="activity-status"></div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3 class="card-title">
+                                <i class="fas fa-ruler"></i>
+                                pH Scale Visualization
+                            </h3>
+                            <div class="ph-scale-container">
+                                <div class="ph-scale" id="ph-scale">
+                                    <div class="ph-scale-background"></div>
+                                    <div class="ph-markers">
+                                        <div class="ph-marker" data-ph="0">0</div>
+                                        <div class="ph-marker" data-ph="2">2</div>
+                                        <div class="ph-marker" data-ph="4">4</div>
+                                        <div class="ph-marker" data-ph="6">6</div>
+                                        <div class="ph-marker" data-ph="7" class="neutral">7</div>
+                                        <div class="ph-marker" data-ph="8">8</div>
+                                        <div class="ph-marker" data-ph="10">10</div>
+                                        <div class="ph-marker" data-ph="12">12</div>
+                                        <div class="ph-marker" data-ph="14">14</div>
+                                    </div>
+                                    <div class="ph-pointer" id="ph-pointer"></div>
+                                    <div class="enzyme-ranges" id="enzyme-ranges"></div>
+                                </div>
+                                <div class="ph-labels">
+                                    <span class="acidic">Acidic</span>
+                                    <span class="neutral">Neutral</span>
+                                    <span class="basic">Basic</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="activity-chart-container">
+                    <div class="card">
+                        <h3 class="card-title">
+                            <i class="fas fa-chart-area"></i>
+                            Activity vs pH Chart
+                        </h3>
+                        <canvas id="activity-chart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="section">
+            <div class="container">
+                <div class="hero">
+                    <h2 class="hero-title">
+                        <i class="fas fa-book-open"></i>
+                        Learn About Enzymes & pH
+                    </h2>
+                    <p class="hero-subtitle">
+                        Understanding the relationship between pH and enzyme functionality
+                    </p>
+                </div>
+
+                <div class="education-grid">
+                    <div class="education-card">
+                        <div class="card-icon">
+                            <i class="fas fa-dna"></i>
+                        </div>
+                        <h3>What are Enzymes?</h3>
+                        <p>Enzymes are biological catalysts that speed up chemical reactions in living organisms. They are proteins with specific three-dimensional structures that allow them to bind to specific molecules called substrates.</p>
+                        <ul>
+                            <li>Made of amino acid chains folded into specific shapes</li>
+                            <li>Have active sites that bind to substrates</li>
+                            <li>Lower activation energy for reactions</li>
+                            <li>Are not consumed in the reaction</li>
+                        </ul>
+                    </div>
+
+                    <div class="education-card">
+                        <div class="card-icon">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <h3>pH and Its Effects</h3>
+                        <p>pH measures how acidic or basic a solution is. Enzymes are sensitive to pH changes because their structure depends on the ionization state of amino acid residues.</p>
+                        <ul>
+                            <li>pH 0-6: Acidic (more H+ ions)</li>
+                            <li>pH 7: Neutral (pure water)</li>
+                            <li>pH 8-14: Basic (more OH- ions)</li>
+                            <li>Each enzyme has an optimal pH range</li>
+                        </ul>
+                    </div>
+
+                    <div class="education-card">
+                        <div class="card-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h3>Enzyme Denaturation</h3>
+                        <p>Extreme pH values can cause irreversible changes to enzyme structure, leading to loss of function. This process is called denaturation.</p>
+                        <ul>
+                            <li>Changes in protein folding pattern</li>
+                            <li>Loss of active site shape</li>
+                            <li>Irreversible in most cases</li>
+                            <li>Results in complete loss of activity</li>
+                        </ul>
+                    </div>
+
+                    <div class="education-card">
+                        <div class="card-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <h3>Pepsin - Stomach Enzyme</h3>
+                        <p>Pepsin works in the highly acidic environment of the stomach, breaking down proteins into smaller peptides.</p>
+                        <div class="enzyme-stats">
+                            <div class="stat">
+                                <span class="stat-label">Optimal pH:</span>
+                                <span class="stat-value">1.5 - 2.5</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Location:</span>
+                                <span class="stat-value">Stomach</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Function:</span>
+                                <span class="stat-value">Protein digestion</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="education-card">
+                        <div class="card-icon">
+                            <i class="fas fa-cookie-bite"></i>
+                        </div>
+                        <h3>Amylase - Starch Breakdown</h3>
+                        <p>Amylase breaks down starch into simple sugars and works optimally at neutral pH, found in saliva and pancreatic juice.</p>
+                        <div class="enzyme-stats">
+                            <div class="stat">
+                                <span class="stat-label">Optimal pH:</span>
+                                <span class="stat-value">6.5 - 7.5</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Location:</span>
+                                <span class="stat-value">Saliva, Pancreas</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Function:</span>
+                                <span class="stat-value">Starch digestion</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="education-card">
+                        <div class="card-icon">
+                            <i class="fas fa-cut"></i>
+                        </div>
+                        <h3>Trypsin - Protein Cutter</h3>
+                        <p>Trypsin is a pancreatic enzyme that cleaves proteins at specific amino acid sequences, working optimally in basic conditions.</p>
+                        <div class="enzyme-stats">
+                            <div class="stat">
+                                <span class="stat-label">Optimal pH:</span>
+                                <span class="stat-value">7.5 - 8.5</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Location:</span>
+                                <span class="stat-value">Pancreas</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Function:</span>
+                                <span class="stat-value">Protein cleavage</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section">
+            <div class="container">
+                <div class="hero">
+                    <h2 class="hero-title">
+                        <i class="fas fa-info-circle"></i>
+                        About This Project
+                    </h2>
+                    <p class="hero-subtitle">
+                        A comprehensive tool for understanding enzyme behavior
+                    </p>
+                </div>
+
+                <div class="about-content">
+                    <div class="about-card">
+                        <h3>Project Overview</h3>
+                        <p>The pH and Enzyme Activity Predictor is an educational tool designed to help students and researchers understand how pH affects enzyme activity. It provides both theoretical knowledge and practical prediction capabilities.</p>
+                        
+                        <h4>Features:</h4>
+                        <ul>
+                            <li>Interactive pH slider and enzyme selector</li>
+                            <li>Real-time activity calculations</li>
+                            <li>Visual pH scale with enzyme ranges</li>
+                            <li>Activity vs pH charts for each enzyme</li>
+                            <li>Educational content about enzyme biochemistry</li>
+                            <li>Responsive design for all devices</li>
+                        </ul>
+                    </div>
+
+                    <div class="about-card">
+                        <h3>Technical Details</h3>
+                        <p>This application uses mathematical models to simulate enzyme behavior based on established biochemical principles.</p>
+                        
+                        <h4>Calculation Method:</h4>
+                        <ul>
+                            <li>Bell curve distribution for optimal activity</li>
+                            <li>Exponential decay outside optimal ranges</li>
+                            <li>Complete activity loss at denaturation thresholds</li>
+                            <li>Real-time chart generation using Chart.js</li>
+                        </ul>
+
+                        <h4>Technologies Used:</h4>
+                        <div class="tech-stack">
+                            <span class="tech-tag">HTML5</span>
+                            <span class="tech-tag">CSS3</span>
+                            <span class="tech-tag">JavaScript ES6+</span>
+                            <span class="tech-tag">Chart.js</span>
+                            <span class="tech-tag">Python 3.x</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>pH Enzyme Predictor</h4>
+                    <p>Educational tool for understanding enzyme behavior and pH relationships.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="#predictor">Predictor Tool</a>
+                    <a href="#education">Learn More</a>
+                    <a href="enzyme_predictor.py" download>Download Python Script</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>Built with â¤ï¸ for scientific education</p>
+                    <p>&copy; 2025 pH Enzyme Predictor</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
