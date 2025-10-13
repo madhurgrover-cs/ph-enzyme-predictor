@@ -645,4 +645,5 @@ if (typeof module !== 'undefined' && module.exports) {
         getActivityDescription,
         generateReport
     };
+
 }
